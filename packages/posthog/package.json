@@ -11,7 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@home/config": "workspace:*",
+    "@home/config": "*",
     "posthog-node": "^4.0.0"
   }
 }

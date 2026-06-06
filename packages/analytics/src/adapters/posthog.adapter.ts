@@ -3,11 +3,15 @@ import type { AnalyticsPort } from '../analytics.port.js';
 
 export class PostHogAnalyticsAdapter implements AnalyticsPort {
   track(event: string, properties?: Record<string, unknown>): void {
-    getPostHogClient().capture({ distinctId: 'system', event, properties });
+    getPostHogClient().capture({
+      distinctId: 'system',
+      event,
+      ...(properties ? { properties } : {}),
+    });
   }
 
   identify(userId: string, properties?: Record<string, unknown>): void {
-    getPostHogClient().identify({ distinctId: userId, properties });
+    getPostHogClient().identify({ distinctId: userId, ...(properties ? { properties } : {}) });
   }
 
   async shutdown(): Promise<void> {
