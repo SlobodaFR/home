@@ -1,0 +1,25 @@
+{
+  "name": "@home/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@home/config": "*",
+    "@home/logger": "*",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/jwt": "^10.0.0",
+    "@prisma/client": "^5.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^10.0.0",
+    "prisma": "^5.0.0"
+  }
+}
