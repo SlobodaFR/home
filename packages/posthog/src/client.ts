@@ -8,6 +8,7 @@ export interface PostHogConfig {
 let client: PostHog | undefined;
 
 export function initPostHog(config: PostHogConfig): void {
+  if (client) throw new Error('PostHog already initialized — call initPostHog() only once.');
   client = new PostHog(config.apiKey, {
     host: config.host ?? 'https://eu.posthog.com',
   });
