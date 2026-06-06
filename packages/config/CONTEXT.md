@@ -10,10 +10,12 @@ Configuration primitive pour tous les packages. Parse et valide les variables d'
 import { createConfig } from '@home/config';
 import { z } from 'zod';
 
-const config = createConfig(z.object({
-  LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
-  MY_API_KEY: z.string(),
-}));
+const config = createConfig(
+  z.object({
+    LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
+    MY_API_KEY: z.string(),
+  }),
+);
 // Lance une erreur au démarrage si une var est manquante ou invalide
 ```
 

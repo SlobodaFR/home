@@ -25,10 +25,11 @@ jobs:
         run: npm ci
 
       - name: Check formatting (Prettier)
-        run: npx prettier --check ./apps ./packages
+        run: npm run format
 
       - name: Lint (ESLint)
-        run: npx eslint ./apps ./packages
+        run: npm run lint
+
 
       - name: Build
         run: npm run build -ws --if-present

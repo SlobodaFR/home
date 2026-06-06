@@ -12,8 +12,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --check ./apps ./packages",
+    "format:write": "prettier --write",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -34,10 +35,15 @@
     "vitest": "^3.0.0"
   },
   "lint-staged": {
-    "*.{ts,mts,cts}": [
+    "./apps/**/*.{ts,mts,cts}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,md,yml,yaml}": "prettier --write"
+    "./packages/**/*.{ts,mts,cts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "./apps/**/*.{json,md,yml,yaml}": "prettier --write",
+    "./packages/**/*.{json,md,yml,yaml}": "prettier --write"
   }
 }
