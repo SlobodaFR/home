@@ -1,0 +1,17 @@
+{
+  "name": "@home/posthog",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@home/config": "workspace:*",
+    "posthog-node": "^4.0.0"
+  }
+}
