@@ -1,2 +1,2 @@
-// Domain layer — aggregates, value objects, domain events, ports
-export {};
+export { User, Role, UserStatus, Permission } from './user.js';
+export type { UserSnapshot } from './user.js';
