@@ -21,9 +21,9 @@ jobs:
           export-env: true
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          SSH_PRIVATE_KEY: op://home/vps-deploy/private-key
-          VPS_HOST: op://home/vps-deploy/host
-          VPS_USER: op://home/vps-deploy/username
+          SSH_PRIVATE_KEY: op://TECH/thomassloboda_home_secrets/VPS_PRIVATE_KEY
+          VPS_HOST: op://TECH/thomassloboda_home_secrets/VPS_HOST
+          VPS_USER: op://TECH/thomassloboda_home_secrets/VPS_USER
 
       - name: Install dependencies
         run: npm ci

@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    branches-ignore:
-      - main
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   ci:
@@ -14,12 +13,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
+      - name: Load secrets from 1Password
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          SONAR_TOKEN: op://TECH/thomassloboda_home_secrets/SONAR_TOKEN
 
       - name: Install dependencies
         run: npm ci
@@ -30,9 +39,14 @@ jobs:
       - name: Lint (ESLint)
         run: npm run lint
 
-
       - name: Build
         run: npm run build -ws --if-present
 
-      - name: Test
-        run: npm test
+      - name: Test with coverage
+        run: npm run test:coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
