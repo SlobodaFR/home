@@ -7,3 +7,5 @@ export {
   MagicLinkInvalidError,
 } from './magic-link.js';
 export type { MagicLinkSnapshot } from './magic-link.js';
+export { Session, SessionExpiredError } from './session.js';
+export type { SessionSnapshot } from './session.js';
