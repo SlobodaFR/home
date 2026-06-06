@@ -11,6 +11,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@home/posthog": "workspace:*"
+    "@home/posthog": "*"
   }
 }
