@@ -14,6 +14,20 @@ describe('PromoteUser', () => {
     promoteUser = new PromoteUser(userRepository);
   });
 
+  it('should reject promotion when caller does not exist', async () => {
+    // Given
+    const target = UserMother.aUser({ id: 'user-2', email: 'target@example.com' });
+    await userRepository.save(target);
+
+    const command = new PromoteUserCommand('unknown-caller', 'user-2');
+
+    // When
+    const attempt = promoteUser.handle(command);
+
+    // Then
+    await expect(attempt).rejects.toThrow('Caller lacks permission to promote users');
+  });
+
   it('should reject promotion when caller lacks permission', async () => {
     // Given
     const caller = UserMother.aUser({ id: 'user-1', email: 'user@example.com' });

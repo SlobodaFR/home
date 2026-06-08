@@ -14,6 +14,20 @@ describe('DemoteUser', () => {
     demoteUser = new DemoteUser(userRepository);
   });
 
+  it('should reject demotion when caller does not exist', async () => {
+    // Given
+    const target = UserMother.anAdmin({ id: 'admin-2', email: 'target@example.com' });
+    await userRepository.save(target);
+
+    const command = new DemoteUserCommand('unknown-caller', 'admin-2');
+
+    // When
+    const attempt = demoteUser.handle(command);
+
+    // Then
+    await expect(attempt).rejects.toThrow('Caller lacks permission to demote users');
+  });
+
   it('should reject demotion when caller lacks permission', async () => {
     // Given
     const caller = UserMother.aUser({ id: 'user-1', email: 'user@example.com' });
@@ -65,5 +79,22 @@ describe('DemoteUser', () => {
     await expect(attempt).rejects.toThrow('Cannot demote the last remaining admin');
     const stored = await userRepository.findById('admin-1');
     expect(stored?.snapshot().role).toBe(Role.ADMIN);
+  });
+
+  it('should demote a non-admin target even when only one admin remains', async () => {
+    // Given
+    const caller = UserMother.anAdmin({ id: 'admin-1', email: 'admin@example.com' });
+    await userRepository.save(caller);
+    const target = UserMother.aUser({ id: 'user-2', email: 'target@example.com' });
+    await userRepository.save(target);
+
+    const command = new DemoteUserCommand('admin-1', 'user-2');
+
+    // When
+    await demoteUser.handle(command);
+
+    // Then
+    const stored = await userRepository.findById('user-2');
+    expect(stored?.snapshot().role).toBe(Role.USER);
   });
 });

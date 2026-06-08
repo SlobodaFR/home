@@ -28,6 +28,7 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     Permission.USERS_PROMOTE,
     Permission.USERS_DEMOTE,
   ],
+  // Stryker disable next-line ArrayDeclaration: equivalent mutant — any non-Permission literal here still fails every `includes` check
   [Role.USER]: [],
 };
 

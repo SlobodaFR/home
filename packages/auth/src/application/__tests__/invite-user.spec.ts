@@ -9,6 +9,8 @@ import { InviteUser } from '../use-cases/invite-user/invite-user';
 import { InviteUserCommand } from '../use-cases/invite-user/invite-user-command';
 import { UserMother } from './mothers/user-mother';
 
+const MAGIC_LINK_TTL_MS = 15 * 60 * 1000;
+
 describe('InviteUser', () => {
   let userRepository: InMemoryUserRepository;
   let magicLinkRepository: InMemoryMagicLinkRepository;
@@ -38,10 +40,42 @@ describe('InviteUser', () => {
       email: 'alice@example.com',
       tokenHash: 'hashed-generated-token-1',
     });
+    const expiresAt = magicLinks[0]!.snapshot().expiresAt.getTime();
+    expect(Math.abs(expiresAt - (Date.now() + MAGIC_LINK_TTL_MS))).toBeLessThan(5_000);
 
     expect(emailPort.getSentLinks()).toEqual([
       { to: 'alice@example.com', link: 'generated-token-1' },
     ]);
+  });
+
+  it('should send a magic link when the inviter is an admin with permission', async () => {
+    // Given
+    const admin = UserMother.anAdmin({ id: 'admin-1', email: 'admin@example.com' });
+    await userRepository.save(admin);
+
+    const command = new InviteUserCommand('admin-1', 'bob@example.com');
+
+    // When
+    await inviteUser.handle(command);
+
+    // Then
+    expect(magicLinkRepository.getAll()).toHaveLength(1);
+    expect(emailPort.getSentLinks()).toEqual([
+      { to: 'bob@example.com', link: 'generated-token-1' },
+    ]);
+  });
+
+  it('should reject invitation when the inviter does not exist', async () => {
+    // Given
+    const command = new InviteUserCommand('unknown-inviter', 'bob@example.com');
+
+    // When
+    const attempt = inviteUser.handle(command);
+
+    // Then
+    await expect(attempt).rejects.toThrow('Inviter lacks permission to invite users');
+    expect(magicLinkRepository.getAll()).toHaveLength(0);
+    expect(emailPort.getSentLinks()).toEqual([]);
   });
 
   it('should reject invitation when inviter lacks permission', async () => {

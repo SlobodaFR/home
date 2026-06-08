@@ -13,6 +13,17 @@ describe('ListUsers', () => {
     listUsers = new ListUsers(userRepository);
   });
 
+  it('should reject listing when caller does not exist', async () => {
+    // Given
+    const command = new ListUsersCommand('unknown-caller');
+
+    // When
+    const attempt = listUsers.handle(command);
+
+    // Then
+    await expect(attempt).rejects.toThrow('Caller must be an admin to list users');
+  });
+
   it('should reject listing when caller is not an admin', async () => {
     // Given
     const caller = UserMother.aUser({ id: 'user-1', email: 'user@example.com' });

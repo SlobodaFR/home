@@ -13,6 +13,8 @@ import { UserMother } from './mothers/user-mother';
 const future = (ms: number): Date => new Date(Date.now() + ms);
 const past = (ms: number): Date => new Date(Date.now() - ms);
 
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
 describe('VerifyMagicLink', () => {
   let userRepository: InMemoryUserRepository;
   let magicLinkRepository: InMemoryMagicLinkRepository;
@@ -61,6 +63,8 @@ describe('VerifyMagicLink', () => {
       userId,
       refreshHash: 'hashed-generated-token-1',
     });
+    const expiresAt = createdSession?.snapshot().expiresAt.getTime() ?? 0;
+    expect(Math.abs(expiresAt - (Date.now() + SESSION_TTL_MS))).toBeLessThan(5_000);
 
     expect(result).toEqual({
       accessToken: `access-token-for-${userId}-ADMIN`,
@@ -97,6 +101,22 @@ describe('VerifyMagicLink', () => {
       accessToken: 'access-token-for-user-1-USER',
       refreshToken: 'generated-token-1',
     });
+  });
+
+  it('should create a new user without promoting it when an admin already exists', async () => {
+    // Given
+    const admin = UserMother.anAdmin({ id: 'admin-1', email: 'admin@example.com' });
+    await userRepository.save(admin);
+
+    await magicLinkRepository.save(aMagicLink('carol@example.com'));
+    const command = new VerifyMagicLinkCommand('the-token');
+
+    // When
+    await verifyMagicLink.handle(command);
+
+    // Then
+    const carol = userRepository.getAll().find((u) => u.snapshot().email === 'carol@example.com');
+    expect(carol?.snapshot().role).toBe(Role.USER);
   });
 
   it('should propagate the domain error when the magic link is expired', async () => {
