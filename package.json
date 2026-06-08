@@ -16,6 +16,7 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --check ./apps ./packages",
     "format:write": "prettier --write",
+    "export-diagram": "tsx packages/excalidraw-export/src/cli.ts",
     "prepare": "husky"
   },
   "devDependencies": {
