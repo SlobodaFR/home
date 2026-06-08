@@ -20,6 +20,14 @@ export class InMemorySessionRepository implements SessionRepository {
     }
   }
 
+  async deleteAllByUserId(userId: string): Promise<void> {
+    for (const session of this.sessions.values()) {
+      if (session.snapshot().userId === userId) {
+        this.sessions.delete(session.snapshot().id);
+      }
+    }
+  }
+
   getAll(): ReadonlyArray<Session> {
     return [...this.sessions.values()];
   }
