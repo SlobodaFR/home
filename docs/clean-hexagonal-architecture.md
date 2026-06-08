@@ -508,12 +508,12 @@ Implementations that live OUTSIDE the hexagon.
 Implement the ports defined in the hexagon:
 
 ```typescript
-// File: adapters/secondary/in-memory/fakeRideRepository.ts
+// File: adapters/in-memory/in-memory-ride-repository.ts
 
 import { Ride } from '../../../domain/ride';
 import { RideRepository } from '../../../domain/ (ports)rideRepository';
 
-export class FakeRideRepository implements RideRepository {
+export class InMemoryRideRepository implements RideRepository {
   public allRides: Ride[] = [];
 
   save(ride: Ride) {
@@ -523,12 +523,12 @@ export class FakeRideRepository implements RideRepository {
 ```
 
 ```typescript
-// File: adapters/secondary/in-memory/fakeRiderRepository.ts
+// File: adapters/in-memory/in-memory-rider-repository.ts
 
 import { Rider } from '../../../domain/rider';
 import { RiderRepository } from '../../../domain/ (ports)riderRepository';
 
-export class FakeRiderRepository implements RiderRepository {
+export class InMemoryRiderRepository implements RiderRepository {
   private allRiders: Record<string, Rider> = {};
 
   byId(riderId: string): Rider {
@@ -684,16 +684,16 @@ Test the hexagon using fake adapters:
 ```typescript
 // File: application/ride-booking/bookRideUseCase.spec.ts
 
-import { FakeRideRepository } from '../../../adapters/secondary/in-memory/fakeRideRepository';
-import { FakeRiderRepository } from '../../../adapters/secondary/in-memory/fakeRiderRepository';
+import { InMemoryRideRepository } from '../../../adapters/in-memory/in-memory-ride-repository';
+import { InMemoryRiderRepository } from '../../../adapters/in-memory/in-memory-rider-repository';
 import { FixedDateTimeProvider } from '../../../adapters/secondary/in-memory/fixedDateTimeProvider';
 import { MockTripScanner } from '../../../adapters/secondary/in-memory/mockTripScanner';
 import { Rider } from '../../models/rider';
 import { BookRideUseCase } from './bookRideUseCase';
 
 describe('Ride Booking Use Case', () => {
-  let rideRepository: FakeRideRepository;
-  let riderRepository: FakeRiderRepository;
+  let rideRepository: InMemoryRideRepository;
+  let riderRepository: InMemoryRiderRepository;
   let dateTimeProvider: FixedDateTimeProvider;
   let tripScanner: MockTripScanner;
   let bookRideUseCase: BookRideUseCase;
@@ -703,8 +703,8 @@ describe('Ride Booking Use Case', () => {
 
   beforeEach(() => {
     // Arrange: Setup fake adapters
-    rideRepository = new FakeRideRepository();
-    riderRepository = new FakeRiderRepository();
+    rideRepository = new InMemoryRideRepository();
+    riderRepository = new InMemoryRiderRepository();
     dateTimeProvider = new FixedDateTimeProvider();
     tripScanner = new MockTripScanner();
 

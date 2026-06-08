@@ -1,7 +1,7 @@
-import { MagicLink } from '../../../domain/index';
-import type { MagicLinkRepository } from '../../ports/index';
+import { MagicLink } from '../../domain/index';
+import type { MagicLinkRepository } from '../../application/index';
 
-export class FakeMagicLinkRepository implements MagicLinkRepository {
+export class InMemoryMagicLinkRepository implements MagicLinkRepository {
   private readonly magicLinks = new Map<string, MagicLink>();
 
   async findByTokenHash(hash: string): Promise<MagicLink | undefined> {

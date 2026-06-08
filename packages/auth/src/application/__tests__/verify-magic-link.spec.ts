@@ -1,28 +1,30 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  InMemoryMagicLinkRepository,
+  InMemorySessionRepository,
+  InMemoryTokenPort,
+  InMemoryUserRepository,
+} from '../../adapters/in-memory/index';
 import { MagicLink, Role } from '../../domain/index';
 import { VerifyMagicLink } from '../use-cases/verify-magic-link/verify-magic-link';
 import { VerifyMagicLinkCommand } from '../use-cases/verify-magic-link/verify-magic-link-command';
-import { FakeUserRepository } from './fakes/fake-user-repository';
-import { FakeMagicLinkRepository } from './fakes/fake-magic-link-repository';
-import { FakeSessionRepository } from './fakes/fake-session-repository';
-import { FakeTokenPort } from './fakes/fake-token-port';
 import { UserMother } from './mothers/user-mother';
 
 const future = (ms: number): Date => new Date(Date.now() + ms);
 const past = (ms: number): Date => new Date(Date.now() - ms);
 
 describe('VerifyMagicLink', () => {
-  let userRepository: FakeUserRepository;
-  let magicLinkRepository: FakeMagicLinkRepository;
-  let sessionRepository: FakeSessionRepository;
-  let tokenPort: FakeTokenPort;
+  let userRepository: InMemoryUserRepository;
+  let magicLinkRepository: InMemoryMagicLinkRepository;
+  let sessionRepository: InMemorySessionRepository;
+  let tokenPort: InMemoryTokenPort;
   let verifyMagicLink: VerifyMagicLink;
 
   beforeEach(() => {
-    userRepository = new FakeUserRepository();
-    magicLinkRepository = new FakeMagicLinkRepository();
-    sessionRepository = new FakeSessionRepository();
-    tokenPort = new FakeTokenPort();
+    userRepository = new InMemoryUserRepository();
+    magicLinkRepository = new InMemoryMagicLinkRepository();
+    sessionRepository = new InMemorySessionRepository();
+    tokenPort = new InMemoryTokenPort();
     verifyMagicLink = new VerifyMagicLink(
       userRepository,
       magicLinkRepository,

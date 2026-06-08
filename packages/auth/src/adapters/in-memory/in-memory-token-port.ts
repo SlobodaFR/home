@@ -1,7 +1,7 @@
-import type { Role } from '../../../domain/index';
-import type { TokenPort } from '../../ports/index';
+import type { Role } from '../../domain/index';
+import type { TokenPort } from '../../application/index';
 
-export class FakeTokenPort implements TokenPort {
+export class InMemoryTokenPort implements TokenPort {
   private tokenCounter = 0;
 
   generateAccessToken(userId: string, role: Role): string {
