@@ -9,6 +9,9 @@ jobs:
   ci:
     name: Lint, Build & Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -47,6 +50,17 @@ jobs:
 
       - name: Mutation testing (Stryker)
         run: npm run mutation
+
+      - name: Format mutation report for PR comment
+        if: always() && github.event_name == 'pull_request'
+        run: node scripts/mutation-report-to-markdown.mjs packages/auth/reports/mutation/mutation.json > mutation-summary.md
+
+      - name: Post mutation report comment
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: stryker-mutation-report
+          path: mutation-summary.md
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v3

@@ -12,8 +12,10 @@ export function strykerConfig(overrides = {}) {
     packageManager: 'npm',
     testRunner: 'vitest',
     coverageAnalysis: 'perTest',
-    reporters: ['html', 'clear-text', 'progress'],
+    // 'json' feeds the PR comment posted by ci.yml (scripts/mutation-report-to-markdown.mjs)
+    reporters: ['html', 'json', 'clear-text', 'progress'],
     htmlReporter: { fileName: 'reports/mutation/index.html' },
+    jsonReporter: { fileName: 'reports/mutation/mutation.json' },
     thresholds: { high: 80, low: 60, break: 50 },
     tempDirName: '.stryker-tmp',
     ...overrides,
