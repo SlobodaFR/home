@@ -45,6 +45,9 @@ jobs:
       - name: Test with coverage
         run: npm run test:coverage
 
+      - name: Mutation testing (Stryker)
+        run: npm run mutation
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v3
         env:
