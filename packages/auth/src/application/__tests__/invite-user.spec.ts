@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { InviteUser } from '../use-cases/invite-user/invite-user.js';
-import { InviteUserCommand } from '../use-cases/invite-user/invite-user-command.js';
-import { FakeUserRepository } from './fakes/fake-user-repository.js';
-import { FakeMagicLinkRepository } from './fakes/fake-magic-link-repository.js';
-import { FakeTokenPort } from './fakes/fake-token-port.js';
-import { FakeEmailPort } from './fakes/fake-email-port.js';
-import { UserMother } from './mothers/user-mother.js';
+import { InviteUser } from '../use-cases/invite-user/invite-user';
+import { InviteUserCommand } from '../use-cases/invite-user/invite-user-command';
+import { FakeUserRepository } from './fakes/fake-user-repository';
+import { FakeMagicLinkRepository } from './fakes/fake-magic-link-repository';
+import { FakeTokenPort } from './fakes/fake-token-port';
+import { FakeEmailPort } from './fakes/fake-email-port';
+import { UserMother } from './mothers/user-mother';
 
 describe('InviteUser', () => {
   let userRepository: FakeUserRepository;

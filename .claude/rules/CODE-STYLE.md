@@ -19,6 +19,10 @@
 
 ## TypeScript Principles
 
+### Module Imports
+- Relative imports carry **no file extension** (`from './foo'`, not `from './foo.js'`)
+- Matches `moduleResolution: "bundler"` — no compiled `.js` is ever shipped from these packages (`exports` point straight at `.ts` sources)
+
 ### Null Safety
 - **NEVER** use null where avoidable
 - Use `T | undefined` or `T | null` for maybe-present values

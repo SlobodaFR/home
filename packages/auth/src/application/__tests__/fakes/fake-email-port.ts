@@ -1,4 +1,4 @@
-import type { EmailPort } from '../../ports/index.js';
+import type { EmailPort } from '../../ports/index';
 
 interface SentLink {
   to: string;

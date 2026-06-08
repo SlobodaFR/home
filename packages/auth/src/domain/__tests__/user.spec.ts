@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Permission, Role, User, UserStatus } from '../user.js';
+import { Permission, Role, User, UserStatus } from '../user';
 
 describe('User', () => {
   describe('create', () => {

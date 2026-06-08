@@ -1,6 +1,6 @@
 import pino from 'pino';
 import { trace } from '@opentelemetry/api';
-import type { LoggerPort } from '../logger.port.js';
+import type { LoggerPort } from '../logger.port';
 
 function otelContext(): object {
   const span = trace.getActiveSpan();

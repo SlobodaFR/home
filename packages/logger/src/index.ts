@@ -1,2 +1,2 @@
-export type { LoggerPort } from './logger.port.js';
-export { createPinoLogger } from './adapters/pino.adapter.js';
+export type { LoggerPort } from './logger.port';
+export { createPinoLogger } from './adapters/pino.adapter';

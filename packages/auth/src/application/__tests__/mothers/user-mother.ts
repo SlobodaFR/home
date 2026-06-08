@@ -1,4 +1,4 @@
-import { Role, User, UserStatus, type UserSnapshot } from '../../../domain/index.js';
+import { Role, User, UserStatus, type UserSnapshot } from '../../../domain/index';
 
 interface UserOverrides {
   id?: string;

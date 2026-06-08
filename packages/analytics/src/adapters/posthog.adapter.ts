@@ -1,5 +1,5 @@
 import { getPostHogClient } from '@home/posthog';
-import type { AnalyticsPort } from '../analytics.port.js';
+import type { AnalyticsPort } from '../analytics.port';
 
 export class PostHogAnalyticsAdapter implements AnalyticsPort {
   track(event: string, properties?: Record<string, unknown>): void {

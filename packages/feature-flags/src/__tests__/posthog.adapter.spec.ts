@@ -9,7 +9,7 @@ vi.mock('@home/posthog', () => ({
   getPostHogClient: vi.fn().mockReturnValue(mockClient),
 }));
 
-import { PostHogFeatureFlagsAdapter } from '../adapters/posthog.adapter.js';
+import { PostHogFeatureFlagsAdapter } from '../adapters/posthog.adapter';
 
 describe('PostHogFeatureFlagsAdapter', () => {
   let adapter: PostHogFeatureFlagsAdapter;

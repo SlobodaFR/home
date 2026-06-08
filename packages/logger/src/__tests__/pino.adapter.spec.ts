@@ -27,7 +27,7 @@ vi.mock('@opentelemetry/api', () => ({
 }));
 
 import { trace } from '@opentelemetry/api';
-import { createPinoLogger } from '../adapters/pino.adapter.js';
+import { createPinoLogger } from '../adapters/pino.adapter';
 
 describe('createPinoLogger', () => {
   beforeEach(() => {

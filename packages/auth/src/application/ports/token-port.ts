@@ -1,4 +1,4 @@
-import type { Role } from '../../domain/index.js';
+import type { Role } from '../../domain/index';
 
 export interface TokenPort {
   generateAccessToken(userId: string, role: Role): string;

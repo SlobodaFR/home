@@ -1,11 +1,6 @@
-import { MagicLink, Permission } from '../../../domain/index.js';
-import type {
-  MagicLinkRepository,
-  EmailPort,
-  TokenPort,
-  UserRepository,
-} from '../../ports/index.js';
-import type { InviteUserCommand } from './invite-user-command.js';
+import { MagicLink, Permission } from '../../../domain/index';
+import type { MagicLinkRepository, EmailPort, TokenPort, UserRepository } from '../../ports/index';
+import type { InviteUserCommand } from './invite-user-command';
 
 const MAGIC_LINK_TTL_MS = 15 * 60 * 1000;
 
