@@ -1,3 +1,3 @@
-export { VerifyMagicLink } from './verify-magic-link.js';
-export { VerifyMagicLinkCommand } from './verify-magic-link-command.js';
-export type { VerifyMagicLinkResult } from './verify-magic-link-result.js';
+export { VerifyMagicLink } from './verify-magic-link';
+export { VerifyMagicLinkCommand } from './verify-magic-link-command';
+export type { VerifyMagicLinkResult } from './verify-magic-link-result';

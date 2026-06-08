@@ -1,11 +1,11 @@
-export { User, Role, UserStatus, Permission } from './user.js';
-export type { UserSnapshot } from './user.js';
+export { User, Role, UserStatus, Permission } from './user';
+export type { UserSnapshot } from './user';
 export {
   MagicLink,
   MagicLinkExpiredError,
   MagicLinkAlreadyUsedError,
   MagicLinkInvalidError,
-} from './magic-link.js';
-export type { MagicLinkSnapshot } from './magic-link.js';
-export { Session, SessionExpiredError } from './session.js';
-export type { SessionSnapshot } from './session.js';
+} from './magic-link';
+export type { MagicLinkSnapshot } from './magic-link';
+export { Session, SessionExpiredError } from './session';
+export type { SessionSnapshot } from './session';

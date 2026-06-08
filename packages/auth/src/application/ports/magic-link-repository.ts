@@ -1,4 +1,4 @@
-import type { MagicLink } from '../../domain/index.js';
+import type { MagicLink } from '../../domain/index';
 
 export interface MagicLinkRepository {
   findByTokenHash(hash: string): Promise<MagicLink | undefined>;

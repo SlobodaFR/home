@@ -1,12 +1,12 @@
-import { MagicLink, MagicLinkInvalidError, Session, User } from '../../../domain/index.js';
+import { MagicLink, MagicLinkInvalidError, Session, User } from '../../../domain/index';
 import type {
   MagicLinkRepository,
   SessionRepository,
   TokenPort,
   UserRepository,
-} from '../../ports/index.js';
-import type { VerifyMagicLinkCommand } from './verify-magic-link-command.js';
-import type { VerifyMagicLinkResult } from './verify-magic-link-result.js';
+} from '../../ports/index';
+import type { VerifyMagicLinkCommand } from './verify-magic-link-command';
+import type { VerifyMagicLinkResult } from './verify-magic-link-result';
 
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 

@@ -1,4 +1,4 @@
-import type { User } from '../../domain/index.js';
+import type { User } from '../../domain/index';
 
 export interface UserRepository {
   findById(id: string): Promise<User | undefined>;

@@ -1,5 +1,5 @@
-import { MagicLink } from '../../../domain/index.js';
-import type { MagicLinkRepository } from '../../ports/index.js';
+import { MagicLink } from '../../../domain/index';
+import type { MagicLinkRepository } from '../../ports/index';
 
 export class FakeMagicLinkRepository implements MagicLinkRepository {
   private readonly magicLinks = new Map<string, MagicLink>();

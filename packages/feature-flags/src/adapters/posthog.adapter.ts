@@ -1,5 +1,5 @@
 import { getPostHogClient } from '@home/posthog';
-import type { FeatureFlagsPort } from '../feature-flags.port.js';
+import type { FeatureFlagsPort } from '../feature-flags.port';
 
 const ANONYMOUS = 'anonymous';
 

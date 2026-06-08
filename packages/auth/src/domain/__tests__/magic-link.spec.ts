@@ -4,7 +4,7 @@ import {
   MagicLinkAlreadyUsedError,
   MagicLinkExpiredError,
   MagicLinkInvalidError,
-} from '../magic-link.js';
+} from '../magic-link';
 
 const VALID_HASH = 'abc123hash';
 const future = new Date(Date.now() + 15 * 60 * 1000);

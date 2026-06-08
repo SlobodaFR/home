@@ -1,5 +1,5 @@
-import { Session } from '../../../domain/index.js';
-import type { SessionRepository } from '../../ports/index.js';
+import { Session } from '../../../domain/index';
+import type { SessionRepository } from '../../ports/index';
 
 export class FakeSessionRepository implements SessionRepository {
   private readonly sessions = new Map<string, Session>();

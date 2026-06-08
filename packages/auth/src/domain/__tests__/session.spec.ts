@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Session, SessionExpiredError } from '../session.js';
+import { Session, SessionExpiredError } from '../session';
 
 const future = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 const past = new Date(Date.now() - 1);

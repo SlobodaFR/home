@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { MagicLink, Role } from '../../domain/index.js';
-import { VerifyMagicLink } from '../use-cases/verify-magic-link/verify-magic-link.js';
-import { VerifyMagicLinkCommand } from '../use-cases/verify-magic-link/verify-magic-link-command.js';
-import { FakeUserRepository } from './fakes/fake-user-repository.js';
-import { FakeMagicLinkRepository } from './fakes/fake-magic-link-repository.js';
-import { FakeSessionRepository } from './fakes/fake-session-repository.js';
-import { FakeTokenPort } from './fakes/fake-token-port.js';
-import { UserMother } from './mothers/user-mother.js';
+import { MagicLink, Role } from '../../domain/index';
+import { VerifyMagicLink } from '../use-cases/verify-magic-link/verify-magic-link';
+import { VerifyMagicLinkCommand } from '../use-cases/verify-magic-link/verify-magic-link-command';
+import { FakeUserRepository } from './fakes/fake-user-repository';
+import { FakeMagicLinkRepository } from './fakes/fake-magic-link-repository';
+import { FakeSessionRepository } from './fakes/fake-session-repository';
+import { FakeTokenPort } from './fakes/fake-token-port';
+import { UserMother } from './mothers/user-mother';
 
 const future = (ms: number): Date => new Date(Date.now() + ms);
 const past = (ms: number): Date => new Date(Date.now() - ms);

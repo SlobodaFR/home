@@ -1,5 +1,5 @@
-import type { Role } from '../../../domain/index.js';
-import type { TokenPort } from '../../ports/index.js';
+import type { Role } from '../../../domain/index';
+import type { TokenPort } from '../../ports/index';
 
 export class FakeTokenPort implements TokenPort {
   private tokenCounter = 0;

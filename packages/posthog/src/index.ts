@@ -1,2 +1,2 @@
-export { initPostHog, getPostHogClient } from './client.js';
-export type { PostHogConfig } from './client.js';
+export { initPostHog, getPostHogClient } from './client';
+export type { PostHogConfig } from './client';

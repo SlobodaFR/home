@@ -1,4 +1,4 @@
-import type { Session } from '../../domain/index.js';
+import type { Session } from '../../domain/index';
 
 export interface SessionRepository {
   save(session: Session): Promise<void>;

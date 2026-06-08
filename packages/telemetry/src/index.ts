@@ -1,2 +1,2 @@
-export { initTelemetry } from './telemetry.js';
-export type { TelemetryConfig } from './telemetry.js';
+export { initTelemetry } from './telemetry';
+export type { TelemetryConfig } from './telemetry';

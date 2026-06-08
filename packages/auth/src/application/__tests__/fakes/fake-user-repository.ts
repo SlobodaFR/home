@@ -1,5 +1,5 @@
-import { User } from '../../../domain/index.js';
-import type { UserRepository } from '../../ports/index.js';
+import { User } from '../../../domain/index';
+import type { UserRepository } from '../../ports/index';
 
 export class FakeUserRepository implements UserRepository {
   private readonly users = new Map<string, User>();

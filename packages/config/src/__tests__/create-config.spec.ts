@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { createConfig } from '../create-config.js';
+import { createConfig } from '../create-config';
 
 describe('createConfig', () => {
   const originalEnv = process.env;
