@@ -1,5 +1,8 @@
 # CLAUDE.md
 
+## Rule for all agents
+Before all, read and use caveman skill : `./.claude/skills/caveman/SKILL.md`
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project purpose
