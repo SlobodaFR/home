@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Permission, Role, User, UserStatus } from '../user';
+import { Permission, Role, User, UserRevokedError, UserStatus } from '../user';
 
 describe('User', () => {
   describe('create', () => {
@@ -52,6 +52,21 @@ describe('User', () => {
       const revoked = user.revoke();
 
       expect(revoked.snapshot().status).toBe(UserStatus.REVOKED);
+    });
+  });
+
+  describe('assertActive', () => {
+    it('should not throw when the user is ACTIVE', () => {
+      const user = User.create('user-1', 'user@example.com');
+
+      expect(() => user.assertActive()).not.toThrow();
+    });
+
+    it('should throw a UserRevokedError when the user is REVOKED', () => {
+      const user = User.create('user-1', 'user@example.com').revoke();
+
+      expect(() => user.assertActive()).toThrow(UserRevokedError);
+      expect(() => user.assertActive()).toThrow('User has been revoked');
     });
   });
 

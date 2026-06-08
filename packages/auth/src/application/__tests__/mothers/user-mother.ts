@@ -3,6 +3,7 @@ import { Role, User, UserStatus, type UserSnapshot } from '../../../domain/index
 interface UserOverrides {
   id?: string;
   email?: string;
+  status?: UserStatus;
 }
 
 export class UserMother {
