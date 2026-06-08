@@ -1,5 +1,5 @@
 import { User } from '../../domain/index';
-import type { UserRepository } from '../../application/index';
+import type { UserPage, UserRepository } from '../../application/index';
 
 export class InMemoryUserRepository implements UserRepository {
   private readonly users = new Map<string, User>();
@@ -12,6 +12,14 @@ export class InMemoryUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<User | undefined> {
     const user = [...this.users.values()].find((u) => u.snapshot().email === email);
     return user ? User.fromSnapshot(user.snapshot()) : undefined;
+  }
+
+  async findPage(offset: number, limit: number): Promise<UserPage> {
+    const all = [...this.users.values()];
+    return {
+      users: all.slice(offset, offset + limit).map((u) => User.fromSnapshot(u.snapshot())),
+      total: all.length,
+    };
   }
 
   async countAdmins(): Promise<number> {
