@@ -1,24 +1,26 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  InMemoryEmailPort,
+  InMemoryMagicLinkRepository,
+  InMemoryTokenPort,
+  InMemoryUserRepository,
+} from '../../adapters/in-memory/index';
 import { InviteUser } from '../use-cases/invite-user/invite-user';
 import { InviteUserCommand } from '../use-cases/invite-user/invite-user-command';
-import { FakeUserRepository } from './fakes/fake-user-repository';
-import { FakeMagicLinkRepository } from './fakes/fake-magic-link-repository';
-import { FakeTokenPort } from './fakes/fake-token-port';
-import { FakeEmailPort } from './fakes/fake-email-port';
 import { UserMother } from './mothers/user-mother';
 
 describe('InviteUser', () => {
-  let userRepository: FakeUserRepository;
-  let magicLinkRepository: FakeMagicLinkRepository;
-  let tokenPort: FakeTokenPort;
-  let emailPort: FakeEmailPort;
+  let userRepository: InMemoryUserRepository;
+  let magicLinkRepository: InMemoryMagicLinkRepository;
+  let tokenPort: InMemoryTokenPort;
+  let emailPort: InMemoryEmailPort;
   let inviteUser: InviteUser;
 
   beforeEach(() => {
-    userRepository = new FakeUserRepository();
-    magicLinkRepository = new FakeMagicLinkRepository();
-    tokenPort = new FakeTokenPort();
-    emailPort = new FakeEmailPort();
+    userRepository = new InMemoryUserRepository();
+    magicLinkRepository = new InMemoryMagicLinkRepository();
+    tokenPort = new InMemoryTokenPort();
+    emailPort = new InMemoryEmailPort();
     inviteUser = new InviteUser(userRepository, magicLinkRepository, tokenPort, emailPort);
   });
 

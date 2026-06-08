@@ -80,18 +80,18 @@ We combine **Outside-In TDD** with Martin Fowler's **sociable tests** approach a
 // packages/ride-booking-context/src/application/use-cases/ride-booking/bookRide.spec.ts
 
 describe('BookRide', () => {
-  let rideRepository: FakeRideRepository;
-  let customerRepository: FakeCustomerRepository;
-  let bookingRepository: FakeBookingRepository;
-  let passengerRepository: FakePassengerRepository;
+  let rideRepository: InMemoryRideRepository;
+  let customerRepository: InMemoryCustomerRepository;
+  let bookingRepository: InMemoryBookingRepository;
+  let passengerRepository: InMemoryPassengerRepository;
   let entityIdGenerator: StubEntityIdGenerator;
   let bookRide: BookRide;
 
   beforeEach(() => {
-    rideRepository = new FakeRideRepository();
-    customerRepository = new FakeCustomerRepository();
-    bookingRepository = new FakeBookingRepository();
-    passengerRepository = new FakePassengerRepository();
+    rideRepository = new InMemoryRideRepository();
+    customerRepository = new InMemoryCustomerRepository();
+    bookingRepository = new InMemoryBookingRepository();
+    passengerRepository = new InMemoryPassengerRepository();
     entityIdGenerator = new StubEntityIdGenerator();
 
     bookRide = new BookRide(
@@ -326,7 +326,7 @@ const ride = vi.mocked<Ride>();
 const resolver = vi.mocked<PassengerCategoryResolver>();
 
 // GOOD - Use real domain objects, fake only external dependencies
-const rideRepository = new FakeRideRepository();
+const rideRepository = new InMemoryRideRepository();
 const resolver = new PassengerCategoryResolver();  // Real domain service
 ```
 
@@ -337,8 +337,8 @@ const resolver = new PassengerCategoryResolver();  // Real domain service
 const prisma = new PrismaClient();  // Too slow, not unit test
 
 // GOOD - Fake external dependencies
-const rideRepository = new FakeRideRepository();
-const bookingRepository = new FakeBookingRepository();
+const rideRepository = new InMemoryRideRepository();
+const bookingRepository = new InMemoryBookingRepository();
 ```
 
 ## Performance Guidelines

@@ -48,7 +48,7 @@ What dependency?
 
 **NEVER mock domain objects. Use real objects.**
 
-## Snapshot Pattern (Mandatory for Repository Fakes)
+## Snapshot Pattern (Mandatory for In-Memory Repositories)
 
 ```typescript
 export interface BookingRepository {
@@ -56,7 +56,7 @@ export interface BookingRepository {
   findById(id: BookingId): Booking | undefined;
 }
 
-export class FakeBookingRepository implements BookingRepository {
+export class InMemoryBookingRepository implements BookingRepository {
   private readonly bookings = new Map<string, Booking>();
   private readonly persistedEvents: DomainEvent[] = [];
 
@@ -273,7 +273,7 @@ RideMother.aRide()
 ```typescript
 it('should require explicit save for booking updates', () => {
   // Given
-  const repository = new FakeBookingRepository();
+  const repository = new InMemoryBookingRepository();
   const booking = BookingMother.aBookingWith({
     id: 'booking-1',
     tenantId: 'tenant-1',

@@ -1,11 +1,11 @@
-import type { EmailPort } from '../../ports/index';
+import type { EmailPort } from '../../application/index';
 
 interface SentLink {
   to: string;
   link: string;
 }
 
-export class FakeEmailPort implements EmailPort {
+export class InMemoryEmailPort implements EmailPort {
   private readonly sentLinks: SentLink[] = [];
 
   async sendMagicLink(to: string, link: string): Promise<void> {

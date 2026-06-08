@@ -1,7 +1,7 @@
-import { User } from '../../../domain/index';
-import type { UserRepository } from '../../ports/index';
+import { User } from '../../domain/index';
+import type { UserRepository } from '../../application/index';
 
-export class FakeUserRepository implements UserRepository {
+export class InMemoryUserRepository implements UserRepository {
   private readonly users = new Map<string, User>();
 
   async findById(id: string): Promise<User | undefined> {

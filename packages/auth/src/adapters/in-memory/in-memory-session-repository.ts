@@ -1,7 +1,7 @@
-import { Session } from '../../../domain/index';
-import type { SessionRepository } from '../../ports/index';
+import { Session } from '../../domain/index';
+import type { SessionRepository } from '../../application/index';
 
-export class FakeSessionRepository implements SessionRepository {
+export class InMemorySessionRepository implements SessionRepository {
   private readonly sessions = new Map<string, Session>();
 
   async save(session: Session): Promise<void> {

@@ -41,7 +41,7 @@ Repository access in tests only for assertions when using fakes.
                                                            │  Secondary  │
                                                            │  Adapters   │
                                                            └─────────────┘
-                                                           (Fake or Real)
+                                                           (In-Memory or Real)
 ```
 
 ### What This Means
@@ -52,11 +52,11 @@ Repository access in tests only for assertions when using fakes.
 | `expect(response.status).toBe(201)` | `new Passenger(...)` |
 | `response.body.bookingId` | `bookRide.handle(command)` |
 | `import { RideRepository } from '...secondary-ports/...'` (for wiring) | `import { RideId } from '...models/...'` |
-| `import { FakeRideRepository } from '...in-memory/...'` (for test setup) | Direct domain entity construction |
+| `import { InMemoryRideRepository } from '...in-memory/...'` (for test setup) | Direct domain entity construction |
 
 ## Test Modes
 
-### Mode: `fake` (Default)
+### Mode: `in-memory` (Default)
 
 Fast, isolated, deterministic testing with in-memory adapters.
 
@@ -65,14 +65,14 @@ Fast, isolated, deterministic testing with in-memory adapters.
 
 describe('BookRide E2E', () => {
   let app: INestApplication;
-  let rideRepository: FakeRideRepository;
-  let customerRepository: FakeCustomerRepository;
-  let bookingRepository: FakeBookingRepository;
+  let rideRepository: InMemoryRideRepository;
+  let customerRepository: InMemoryCustomerRepository;
+  let bookingRepository: InMemoryBookingRepository;
 
   beforeAll(async () => {
-    rideRepository = new FakeRideRepository();
-    customerRepository = new FakeCustomerRepository();
-    bookingRepository = new FakeBookingRepository();
+    rideRepository = new InMemoryRideRepository();
+    customerRepository = new InMemoryCustomerRepository();
+    bookingRepository = new InMemoryBookingRepository();
 
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
@@ -304,15 +304,15 @@ it('should book ride when valid data', async () => {
 ```typescript
 // WRONG - Tests share state
 describe('Ride Booking API E2E', () => {
-  const rideRepository = new FakeRideRepository(); // Shared!
+  const rideRepository = new InMemoryRideRepository(); // Shared!
 });
 
 // CORRECT - Fresh state per test via beforeAll/beforeEach
 describe('Ride Booking API E2E', () => {
-  let rideRepository: FakeRideRepository;
+  let rideRepository: InMemoryRideRepository;
 
   beforeAll(async () => {
-    rideRepository = new FakeRideRepository(); // Fresh per test suite
+    rideRepository = new InMemoryRideRepository(); // Fresh per test suite
   });
 });
 ```

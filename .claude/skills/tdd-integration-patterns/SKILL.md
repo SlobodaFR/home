@@ -278,12 +278,12 @@ it('should persist booking with all fare fields', async () => {
 });
 ```
 
-### NO Fake Infrastructure in Integration Tests
+### NO In-Memory Adapters in Integration Tests
 
 ```typescript
-// WRONG - Using fakes defeats the purpose
+// WRONG - Using in-memory adapters defeats the purpose
 it('test repository', () => {
-  const repository = new FakeTrainingRepository();  // Not an integration test!
+  const repository = new InMemoryTrainingRepository();  // Not an integration test!
 });
 
 // RIGHT - Real infrastructure
