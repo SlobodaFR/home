@@ -67,3 +67,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+
+      - name: Check SonarCloud Quality Gate
+        if: github.event_name == 'pull_request'
+        id: sonar-quality-gate
+        uses: SonarSource/sonarqube-quality-gate-action@v1
+        with:
+          scanMetadataReportFile: .scannerwork/report-task.txt
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+
+      - name: Post SonarCloud quality gate comment
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: sonarcloud-quality-gate
+          message: |
+            ## SonarCloud Quality Gate
+
+            | Status |
+            |--------|
+            | ${{ steps.sonar-quality-gate.outputs.quality-gate-status == 'PASSED' && '✅ PASSED' || '❌ FAILED' }} |
+
+            [View full report on SonarCloud](https://sonarcloud.io/project/overview?id=SlobodaFR_home)
