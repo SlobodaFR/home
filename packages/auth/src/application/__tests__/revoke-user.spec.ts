@@ -18,6 +18,20 @@ describe('RevokeUser', () => {
     revokeUser = new RevokeUser(userRepository, sessionRepository);
   });
 
+  it('should reject revocation when caller does not exist', async () => {
+    // Given
+    const target = UserMother.aUser({ id: 'user-2', email: 'target@example.com' });
+    await userRepository.save(target);
+
+    const command = new RevokeUserCommand('unknown-caller', 'user-2');
+
+    // When
+    const attempt = revokeUser.handle(command);
+
+    // Then
+    await expect(attempt).rejects.toThrow('Caller lacks permission to revoke users');
+  });
+
   it('should reject revocation when caller lacks permission', async () => {
     // Given
     const caller = UserMother.aUser({ id: 'user-1', email: 'user@example.com' });

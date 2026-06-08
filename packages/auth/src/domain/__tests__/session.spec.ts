@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Session, SessionExpiredError } from '../session';
 
 const future = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -30,6 +30,19 @@ describe('Session', () => {
 
       expect(session.isExpired()).toBe(true);
     });
+
+    it('should return false when the session expires at exactly the current instant', () => {
+      const now = new Date('2026-01-01T00:00:00.000Z');
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+      try {
+        const session = Session.create('session-1', 'user-1', 'hash', now);
+
+        expect(session.isExpired()).toBe(false);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
   });
 
   describe('rotate', () => {
@@ -51,6 +64,7 @@ describe('Session', () => {
       const session = Session.create('session-1', 'user-1', 'hash', past);
 
       expect(() => session.rotate('new-hash', future)).toThrow(SessionExpiredError);
+      expect(() => session.rotate('new-hash', future)).toThrow('Session has expired');
     });
   });
 

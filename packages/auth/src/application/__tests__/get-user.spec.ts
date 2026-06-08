@@ -13,6 +13,20 @@ describe('GetUser', () => {
     getUser = new GetUser(userRepository);
   });
 
+  it('should reject getting a user when caller does not exist', async () => {
+    // Given
+    const target = UserMother.aUser({ id: 'user-2', email: 'target@example.com' });
+    await userRepository.save(target);
+
+    const command = new GetUserCommand('unknown-caller', 'user-2');
+
+    // When
+    const attempt = getUser.handle(command);
+
+    // Then
+    await expect(attempt).rejects.toThrow('Caller must be an admin to get users');
+  });
+
   it('should reject getting a user when caller is not an admin', async () => {
     // Given
     const caller = UserMother.aUser({ id: 'user-1', email: 'user@example.com' });

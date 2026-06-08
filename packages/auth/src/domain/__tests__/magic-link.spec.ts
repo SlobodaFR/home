@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   MagicLink,
   MagicLinkAlreadyUsedError,
@@ -36,6 +36,19 @@ describe('MagicLink', () => {
       const link = MagicLink.create('link-1', 'alice@example.com', VALID_HASH, past);
 
       expect(() => link.verify(VALID_HASH)).toThrow(MagicLinkExpiredError);
+    });
+
+    it('should not throw when the link expires at exactly the current instant', () => {
+      const now = new Date('2026-01-01T00:00:00.000Z');
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+      try {
+        const link = MagicLink.create('link-1', 'alice@example.com', VALID_HASH, now);
+
+        expect(() => link.verify(VALID_HASH)).not.toThrow();
+      } finally {
+        vi.useRealTimers();
+      }
     });
 
     it('should throw MagicLinkAlreadyUsedError when link has been consumed', () => {
