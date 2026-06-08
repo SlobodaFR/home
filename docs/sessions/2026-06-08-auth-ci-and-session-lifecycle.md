@@ -67,7 +67,9 @@ RefreshSession              RevokeSession
 (rotation du refresh token)  (déconnexion / invalidation)
 ```
 
-Voir le diagramme Excalidraw : [`auth-flow.excalidraw`](./diagrams/auth-flow.excalidraw)
+![Auth — flux magic-link & cycle de vie des sessions](./diagrams/auth-flow.png)
+
+Source éditable : [`auth-flow.excalidraw`](./diagrams/auth-flow.excalidraw)
 
 ## Issues restantes (file d'attente BC auth)
 
