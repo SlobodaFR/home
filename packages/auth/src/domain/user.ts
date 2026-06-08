@@ -1,3 +1,9 @@
+export class UserRevokedError extends Error {
+  constructor() {
+    super('User has been revoked');
+  }
+}
+
 export enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
@@ -54,6 +60,12 @@ export class User {
       snapshot.status,
       snapshot.createdAt,
     );
+  }
+
+  assertActive(): void {
+    if (this._status === UserStatus.REVOKED) {
+      throw new UserRevokedError();
+    }
   }
 
   hasPermission(permission: Permission): boolean {
