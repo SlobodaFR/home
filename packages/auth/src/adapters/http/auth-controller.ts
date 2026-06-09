@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, HttpCode, Inject, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   InviteUser,
   InviteUserCommand,
@@ -24,6 +25,7 @@ interface RefreshBody {
   refreshToken: string;
 }
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -35,18 +37,24 @@ export class AuthController {
 
   @Post('invite')
   @HttpCode(201)
+  @ApiOperation({ summary: 'Invite a user by email' })
+  @ApiResponse({ status: 201, description: 'Invitation sent' })
   async invite(@Body() body: InviteBody): Promise<void> {
     await this.inviteUser.handle(new InviteUserCommand(body.inviterUserId, body.email));
   }
 
   @Post('verify')
   @HttpCode(200)
+  @ApiOperation({ summary: 'Verify magic link token and get session tokens' })
+  @ApiResponse({ status: 200, description: 'Access and refresh tokens' })
   async verify(@Body() body: VerifyBody): Promise<{ accessToken: string; refreshToken: string }> {
     return this.verifyMagicLink.handle(new VerifyMagicLinkCommand(body.token));
   }
 
   @Post('refresh')
   @HttpCode(200)
+  @ApiOperation({ summary: 'Refresh access token' })
+  @ApiResponse({ status: 200, description: 'New access and refresh tokens' })
   async refresh(@Body() body: RefreshBody): Promise<{ accessToken: string; refreshToken: string }> {
     return this.refreshSession.handle(new RefreshSessionCommand(body.refreshToken));
   }
@@ -54,6 +62,9 @@ export class AuthController {
   @Delete('session')
   @HttpCode(204)
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Revoke current session' })
+  @ApiResponse({ status: 204, description: 'Session revoked' })
   async revokeSessionRoute(@Body() body: RefreshBody): Promise<void> {
     await this.revokeSession.handle(new RevokeSessionCommand(body.refreshToken));
   }
