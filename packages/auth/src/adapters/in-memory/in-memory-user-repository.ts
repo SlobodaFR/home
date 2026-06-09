@@ -37,4 +37,8 @@ export class InMemoryUserRepository implements UserRepository {
   getAll(): ReadonlyArray<User> {
     return [...this.users.values()];
   }
+
+  clear(): void {
+    this.users.clear();
+  }
 }

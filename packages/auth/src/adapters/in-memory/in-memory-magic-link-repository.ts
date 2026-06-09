@@ -16,4 +16,8 @@ export class InMemoryMagicLinkRepository implements MagicLinkRepository {
   getAll(): ReadonlyArray<MagicLink> {
     return [...this.magicLinks.values()];
   }
+
+  clear(): void {
+    this.magicLinks.clear();
+  }
 }

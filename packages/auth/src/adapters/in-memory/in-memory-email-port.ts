@@ -15,4 +15,8 @@ export class InMemoryEmailPort implements EmailPort {
   getSentLinks(): ReadonlyArray<SentLink> {
     return [...this.sentLinks];
   }
+
+  clear(): void {
+    this.sentLinks.length = 0;
+  }
 }

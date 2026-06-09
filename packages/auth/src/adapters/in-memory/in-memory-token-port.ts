@@ -25,4 +25,8 @@ export class InMemoryTokenPort implements TokenPort {
   hashToken(token: string): string {
     return `hashed-${token}`;
   }
+
+  clear(): void {
+    this.tokenCounter = 0;
+  }
 }

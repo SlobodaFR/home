@@ -31,4 +31,8 @@ export class InMemorySessionRepository implements SessionRepository {
   getAll(): ReadonlyArray<Session> {
     return [...this.sessions.values()];
   }
+
+  clear(): void {
+    this.sessions.clear();
+  }
 }
