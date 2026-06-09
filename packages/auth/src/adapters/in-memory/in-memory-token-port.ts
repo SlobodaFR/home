@@ -11,7 +11,7 @@ export class InMemoryTokenPort implements TokenPort {
   verifyAccessToken(token: string): { userId: string; role: Role } {
     const match = token.match(/^access-token-for-(.+)-(.+)$/);
     if (!match) throw new Error('Invalid token');
-    return { userId: match[1], role: match[2] as Role };
+    return { userId: match[1]!, role: match[2]! as Role };
   }
 
   generateRefreshToken(): string {
