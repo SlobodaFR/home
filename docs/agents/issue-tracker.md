@@ -20,3 +20,11 @@ Create a GitHub issue.
 ## When a skill says "fetch the relevant ticket"
 
 Run `gh issue view <number> --comments`.
+
+## Issue spec vs current code
+
+Issue bodies describe **intent at the time of writing** — interfaces, signatures, and port definitions may differ from what is currently in the codebase. Before implementing:
+
+1. Read the actual file (port interface, existing adapter, barrel) — don't assume the issue spec is current.
+2. When the issue spec and the code differ, **follow the code** for existing signatures (to avoid breaking callers) and **extend** toward the spec for missing methods.
+3. After reconciling, note the delta in the commit message or PR description so the divergence is traceable.

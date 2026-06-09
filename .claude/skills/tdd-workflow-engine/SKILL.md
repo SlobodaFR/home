@@ -312,6 +312,14 @@ At CYCLE_CHECK/CYCLE_COMPLETE, update the TDD analysis file: change the just-com
 4. Run test → verify it passes
 5. **Regression check:** run the full test file. If an existing test breaks, fix the regression before continuing.
 
+## CYCLE_COMPLETE — Mandatory Build Check
+
+After all tests in the cycle are GREEN, before reporting CYCLE_COMPLETE:
+
+1. Run `npm run build -w <package>` (runs `tsc --noEmit`) to catch strict TypeScript errors not surfaced by Vitest (e.g. `string | undefined` narrowing, missing interface members).
+2. If the build fails: fix the TypeScript error, re-run the full test suite to confirm 0 regressions, then report CYCLE_COMPLETE.
+3. **Port extension rule:** if you added methods to a port interface, grep for ALL implementations (`grep -r "implements <PortName>"`) and update every one — including InMemory fakes — before the build check.
+
 ## Enforcement Priority
 
 1. **HIGHEST:** Wishful thinking — test MUST be written first
@@ -329,3 +337,5 @@ At CYCLE_CHECK/CYCLE_COMPLETE, update the TDD analysis file: change the just-com
 - [ ] No defensive code without failing test
 - [ ] Domain layer has ZERO infrastructure dependencies (DIP)
 - [ ] Technical expectations applied if provided
+- [ ] `npm run build -w <package>` passes before CYCLE_COMPLETE (catches strict TS errors)
+- [ ] All port implementations updated when interface is extended (including InMemory fakes)

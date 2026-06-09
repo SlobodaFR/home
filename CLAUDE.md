@@ -113,6 +113,19 @@ Multi-context layout — `CONTEXT-MAP.md` at the root points to per-package `CON
 | `tdd-analyze` | `/tdd-analyze` | Invoke the `tdd-analyze` agent (requirement → test list). |
 | `tdd-auto` | `/tdd-auto` | Invoke the `tdd-auto` agent (autonomous TDD, no gates). |
 
+## Commits
+
+- Format: `type(scope): description` (Conventional Commits)
+- Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`
+- Max 72 characters on the subject line
+- Commit message and body in **English**
+
+## Pull Requests
+
+- Title: same format as commit message (`type(scope): description`) but **in French**
+- Always linked to an issue with `Closes #xxx`
+- Fill every section of the PR template — never skip or delete sections
+
 ### Internal TDD support skills
 
 Used automatically by `tdd`, `tdd-auto`, and `tdd-analyze` agents — not invoked directly by users.
