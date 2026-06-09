@@ -333,4 +333,111 @@ describe('AuthModule E2E', () => {
       expect(response.statusCode).toBe(200);
     });
   });
+
+  describe('RBAC — user role is forbidden on admin routes', () => {
+    async function setupAdminAndUser(): Promise<{
+      adminAccessToken: string;
+      userAccessToken: string;
+      userId: string;
+    }> {
+      await app.inject({
+        method: 'POST',
+        url: '/auth/invite',
+        payload: { email: 'admin@example.com' },
+      });
+      const adminMagicToken = emailPort.getSentLinks()[0]!.link;
+      const adminVerifyRes = await app.inject({
+        method: 'POST',
+        url: '/auth/verify',
+        payload: { token: adminMagicToken },
+      });
+      const { accessToken: adminAccessToken } = adminVerifyRes.json<{
+        accessToken: string;
+        refreshToken: string;
+      }>();
+
+      await app.inject({
+        method: 'POST',
+        url: '/auth/invite',
+        payload: { email: 'user@example.com' },
+      });
+      const userMagicToken = emailPort.getSentLinks()[1]!.link;
+      const userVerifyRes = await app.inject({
+        method: 'POST',
+        url: '/auth/verify',
+        payload: { token: userMagicToken },
+      });
+      const { accessToken: userAccessToken } = userVerifyRes.json<{
+        accessToken: string;
+        refreshToken: string;
+      }>();
+
+      const userId = userRepository
+        .getAll()
+        .find((u) => u.snapshot().email === 'user@example.com')!
+        .snapshot().id;
+
+      return { adminAccessToken, userAccessToken, userId };
+    }
+
+    it('should return 403 when user role calls GET /users', async () => {
+      const { userAccessToken } = await setupAdminAndUser();
+
+      const response = await app.inject({
+        method: 'GET',
+        url: '/users',
+        headers: { authorization: `Bearer ${userAccessToken}` },
+      });
+
+      expect(response.statusCode).toBe(403);
+    });
+
+    it('should return 403 when user role calls GET /users/:id', async () => {
+      const { userAccessToken, userId } = await setupAdminAndUser();
+
+      const response = await app.inject({
+        method: 'GET',
+        url: `/users/${userId}`,
+        headers: { authorization: `Bearer ${userAccessToken}` },
+      });
+
+      expect(response.statusCode).toBe(403);
+    });
+
+    it('should return 403 when user role calls POST /users/:id/revoke', async () => {
+      const { userAccessToken, userId } = await setupAdminAndUser();
+
+      const response = await app.inject({
+        method: 'POST',
+        url: `/users/${userId}/revoke`,
+        headers: { authorization: `Bearer ${userAccessToken}` },
+      });
+
+      expect(response.statusCode).toBe(403);
+    });
+
+    it('should return 403 when user role calls POST /users/:id/promote', async () => {
+      const { userAccessToken, userId } = await setupAdminAndUser();
+
+      const response = await app.inject({
+        method: 'POST',
+        url: `/users/${userId}/promote`,
+        headers: { authorization: `Bearer ${userAccessToken}` },
+      });
+
+      expect(response.statusCode).toBe(403);
+    });
+
+    it('should return 403 when user role calls POST /users/:id/demote', async () => {
+      const { userAccessToken, userId } = await setupAdminAndUser();
+
+      const response = await app.inject({
+        method: 'POST',
+        url: `/users/${userId}/demote`,
+        headers: { authorization: `Bearer ${userAccessToken}` },
+      });
+
+      expect(response.statusCode).toBe(403);
+    });
+  });
 });

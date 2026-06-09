@@ -14,7 +14,7 @@ export const REQUIRED_PERMISSION_KEY = 'requiredPermission';
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(
-    private readonly reflector: Reflector,
+    @Inject(Reflector) private readonly reflector: Reflector,
     @Inject('UserRepository') private readonly userRepository: UserRepository,
   ) {}
 
