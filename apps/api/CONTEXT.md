@@ -52,6 +52,14 @@ apps/api/
 
 **Raison :** esbuild (via tsx) n'applique `experimentalDecorators` qu'aux fichiers correspondant aux patterns `include`. Sans ça, les décorateurs NestJS (`@Injectable`, `@Inject`, `@Controller`, etc.) dans les packages workspace ne sont pas transformés → erreur runtime `Parameter decorators only work when experimental decorators are enabled`.
 
+## Architecture
+
+`apps/api` assemble les modules NestJS des BCs. L'architecture globale suit le modèle hexagonal défini dans chaque BC.
+
+![Architecture Hexagonale @home/auth](../../docs/diagrams/auth-hexagonal-architecture.png)
+
+> Détail des couches et workflows : [`packages/auth/CONTEXT.md`](../../packages/auth/CONTEXT.md)
+
 ## Dépendances
 
 ```

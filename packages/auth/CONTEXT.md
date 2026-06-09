@@ -105,8 +105,45 @@ L'API est documentée via `@nestjs/swagger`. L'UI est accessible à `/docs` en d
 
 ## Diagrammes
 
-- [Architecture Hexagonale](../../docs/diagrams/auth-hexagonal-architecture.excalidraw) — couches Primary / Application / Domain / Ports / Secondary
-- [Flux magic-link & sessions](../../docs/sessions/diagrams/auth-flow.excalidraw) — cycle de vie use cases
+### Architecture hexagonale
+
+![Architecture Hexagonale](../../docs/diagrams/auth-hexagonal-architecture.png)
+
+Le diagramme se lit de gauche à droite, suivant la **Dependency Rule** :
+
+| Zone                 | Couleur           | Contenu                                                                                         | Rôle                                               |
+| -------------------- | ----------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Adapters Primaires   | Orange            | `AuthController`, `UsersController`, `JwtAuthGuard`, `PermissionsGuard`, `AuthModule`           | Reçoivent les appels HTTP, délèguent aux use cases |
+| Application          | Bleu              | 9 use cases (`InviteUser` … `DemoteUser`)                                                       | Orchestrent le domaine via les ports               |
+| Domain               | Violet            | `User`, `MagicLink`, `Session`                                                                  | Logique métier pure, zéro dépendance externe       |
+| Ports                | Gris (pointillés) | `UserRepository`, `MagicLinkRepository`, `SessionRepository`, `TokenPort`, `EmailPort`          | Interfaces définies par le domaine/application     |
+| Adapters Secondaires | Vert              | Prisma repos, `JwtTokenAdapter`, `CryptoTokenAdapter`, `ResendEmailAdapter`, `SmtpEmailAdapter` | Implémentent les ports (infrastructure)            |
+
+Les dépendances ne vont **jamais** vers la droite — le domaine ignore l'infrastructure.
+
+> Source : [`docs/diagrams/auth-hexagonal-architecture.excalidraw`](../../docs/diagrams/auth-hexagonal-architecture.excalidraw)
+
+---
+
+### Flux magic-link & cycle de vie des sessions
+
+![Flux magic-link](../../docs/sessions/diagrams/auth-flow.png)
+
+Quatre workflows couverts :
+
+**1. Invitation (`InviteUser`)**
+Un admin (ou bootstrap) appelle `POST /auth/invite` → `InviteUser` crée un `MagicLink` (token SHA-256, TTL 15 min) et déclenche `UserInvited` → `EmailPort.sendMagicLink` envoie le lien à l'utilisateur.
+
+**2. Vérification (`VerifyMagicLink`)**
+L'utilisateur clique le lien → `POST /auth/verify` → `VerifyMagicLink` vérifie le token haché, invalide le `MagicLink` (single-use), crée une `Session` → retourne `{ accessToken (JWT 15 min), refreshToken (opaque 30 j) }`. Si aucun `ADMIN` existant → auto-promotion.
+
+**3. Renouvellement (`RefreshSession`)**
+`POST /auth/refresh` avec `refreshToken` → `RefreshSession` invalide l'ancien token, génère une nouvelle paire → rotation garantit qu'un token volé est détecté au prochain usage.
+
+**4. Déconnexion (`RevokeSession`)**
+`DELETE /auth/session` (Bearer requis) avec `refreshToken` → `RevokeSession` invalide la session → l'access token expire naturellement (15 min).
+
+> Source : [`docs/sessions/diagrams/auth-flow.excalidraw`](../../docs/sessions/diagrams/auth-flow.excalidraw)
 
 ## ADRs associés
 
