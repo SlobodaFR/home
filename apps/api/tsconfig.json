@@ -3,9 +3,22 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "baseUrl": ".",
+    "paths": {
+      "@home/auth": ["../../packages/auth/src/index.ts"],
+      "@home/config": ["../../packages/config/src/index.ts"],
+      "@home/logger": ["../../packages/logger/src/index.ts"],
+      "@home/posthog": ["../../packages/posthog/src/index.ts"],
+      "@home/telemetry": ["../../packages/telemetry/src/index.ts"]
+    }
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "../../packages/auth/src/**/*",
+    "../../packages/config/src/**/*",
+    "../../packages/logger/src/**/*",
+    "../../packages/posthog/src/**/*",
+    "../../packages/telemetry/src/**/*"
+  ],
   "exclude": ["node_modules", "dist"]
 }

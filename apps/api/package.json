@@ -6,9 +6,10 @@
   "scripts": {
     "build": "tsc --noEmit",
     "start": "node dist/main.js",
-    "start:dev": "tsx watch src/main.ts"
+    "start:dev": "tsx watch --tsconfig ./tsconfig.json src/main.ts"
   },
   "dependencies": {
+    "@fastify/static": "^7.0.4",
     "@home/auth": "*",
     "@home/config": "*",
     "@home/logger": "*",
@@ -16,7 +17,8 @@
     "@home/telemetry": "*",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
-    "@nestjs/platform-fastify": "^10.0.0"
+    "@nestjs/platform-fastify": "^10.0.0",
+    "@nestjs/swagger": "^8.1.1"
   },
   "devDependencies": {
     "tsx": "^4.0.0"
