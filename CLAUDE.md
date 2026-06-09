@@ -23,7 +23,9 @@ See `.claude/rules/` for canonical references:
 
 - **Language**: TypeScript (strict, ESM)
 - **Package manager**: npm workspaces
-- **Tests**: Vitest
+- **HTTP framework**: NestJS v10 + Fastify adapter (`apps/api`)
+- **API documentation**: `@nestjs/swagger` — Swagger UI at `/docs`
+- **Tests**: Vitest (unit + integration) + `@nestjs/testing` (E2E HTTP)
 - **Lint/format**: ESLint + Prettier
 - **Git hooks**: Husky — lint-staged (`pre-commit`), commitlint (`commit-msg`)
 - **Commit convention**: Conventional Commits (`type(scope): message`)

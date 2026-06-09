@@ -42,6 +42,16 @@ apps/api ←── auth
          ←── posthog
 ```
 
+## Architecture
+
+### @home/auth — Architecture Hexagonale
+
+![Architecture Hexagonale auth](docs/diagrams/auth-hexagonal-architecture.png)
+
+Les cinq couches de gauche à droite : **Adapters Primaires HTTP** (NestJS controllers + guards) → **Application** (use cases) → **Domain** (agrégats User / MagicLink / Session) → **Ports** (interfaces) → **Adapters Secondaires** (Prisma, JWT, Crypto, Resend, SMTP).
+
+> Voir [`packages/auth/CONTEXT.md`](packages/auth/CONTEXT.md) pour le détail des workflows.
+
 ## Décisions système
 
 Voir `docs/adr/` pour les ADRs couvrant l'ensemble du workspace.

@@ -52,6 +52,24 @@ Permissions définies comme enum statique dans le domaine — pas de table DB.
 | `EmailPort`           | `ResendEmailAdapter` (prod), `SmtpEmailAdapter` (dev/MailDev)     |
 | `TokenPort`           | `JwtTokenAdapter` (access) + `CryptoTokenAdapter` (refresh/magic) |
 
+## Adapters HTTP (`src/adapters/http/`)
+
+| Fichier            | Rôle                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------- | ------- | ------- |
+| `AuthModule`       | Module NestJS — câble tous les providers via string tokens DI                                             |
+| `AuthController`   | Routes publiques : `POST /auth/invite`, `POST /auth/verify`, `POST /auth/refresh`, `DELETE /auth/session` |
+| `UsersController`  | Routes admin (Bearer + RBAC) : `GET /users`, `GET /users/:id`, `POST /users/:id/revoke                    | promote | demote` |
+| `JwtAuthGuard`     | Guard Bearer — vérifie le JWT via `TokenPort.verifyAccessToken`, attache `request.user`                   |
+| `PermissionsGuard` | Guard RBAC — lit `@RequirePermission` metadata via `Reflector`, vérifie `user.hasPermission()`            |
+
+### DI tokens
+
+Tous les providers NestJS utilisent des **string tokens** (`'UserRepository'`, `'TokenPort'`, etc.) pour rester découplés des implémentations concrètes. Les adaptateurs in-memory sont injectés par défaut ; les adaptateurs prod (Prisma, Resend, JWT) peuvent surcharger via `overrideProvider` en tests ou via un module de production distinct.
+
+### Swagger
+
+L'API est documentée via `@nestjs/swagger`. L'UI est accessible à `/docs` en dev. `@ApiTags`, `@ApiOperation`, `@ApiBearerAuth` sont posés sur les deux controllers.
+
 ## Infrastructure
 
 - **DB** : SQLite via Prisma (`prisma/schema.prisma`)
@@ -59,6 +77,14 @@ Permissions définies comme enum statique dans le domaine — pas de table DB.
 - **Tests d'intégration** : SQLite in-memory (`file::memory:`)
 - **Email prod** : Resend (API key via 1Password)
 - **Email dev** : MailDev via SMTP
+
+## Tests
+
+| Type                         | Localisation                                   | Stratégie                                                      |
+| ---------------------------- | ---------------------------------------------- | -------------------------------------------------------------- |
+| Use cases (application core) | `src/application/**/__tests__/`                | Sociable — in-memory adapters, domaine réel                    |
+| Repositories (intégration)   | `src/adapters/prisma/__tests__/`               | SQLite in-memory réelle                                        |
+| E2E HTTP                     | `src/adapters/http/__tests__/auth.e2e.spec.ts` | `@nestjs/testing` + Fastify `app.inject()`, adapters in-memory |
 
 ## Règles domaine clés
 
@@ -76,6 +102,48 @@ Permissions définies comme enum statique dans le domaine — pas de table DB.
   ├── @home/logger   (LoggerPort)
   └── prisma         (client généré dans packages/auth)
 ```
+
+## Diagrammes
+
+### Architecture hexagonale
+
+![Architecture Hexagonale](../../docs/diagrams/auth-hexagonal-architecture.png)
+
+Le diagramme se lit de gauche à droite, suivant la **Dependency Rule** :
+
+| Zone                 | Couleur           | Contenu                                                                                         | Rôle                                               |
+| -------------------- | ----------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Adapters Primaires   | Orange            | `AuthController`, `UsersController`, `JwtAuthGuard`, `PermissionsGuard`, `AuthModule`           | Reçoivent les appels HTTP, délèguent aux use cases |
+| Application          | Bleu              | 9 use cases (`InviteUser` … `DemoteUser`)                                                       | Orchestrent le domaine via les ports               |
+| Domain               | Violet            | `User`, `MagicLink`, `Session`                                                                  | Logique métier pure, zéro dépendance externe       |
+| Ports                | Gris (pointillés) | `UserRepository`, `MagicLinkRepository`, `SessionRepository`, `TokenPort`, `EmailPort`          | Interfaces définies par le domaine/application     |
+| Adapters Secondaires | Vert              | Prisma repos, `JwtTokenAdapter`, `CryptoTokenAdapter`, `ResendEmailAdapter`, `SmtpEmailAdapter` | Implémentent les ports (infrastructure)            |
+
+Les dépendances ne vont **jamais** vers la droite — le domaine ignore l'infrastructure.
+
+> Source : [`docs/diagrams/auth-hexagonal-architecture.excalidraw`](../../docs/diagrams/auth-hexagonal-architecture.excalidraw)
+
+---
+
+### Flux magic-link & cycle de vie des sessions
+
+![Flux magic-link](../../docs/sessions/diagrams/auth-flow.png)
+
+Quatre workflows couverts :
+
+**1. Invitation (`InviteUser`)**
+Un admin (ou bootstrap) appelle `POST /auth/invite` → `InviteUser` crée un `MagicLink` (token SHA-256, TTL 15 min) et déclenche `UserInvited` → `EmailPort.sendMagicLink` envoie le lien à l'utilisateur.
+
+**2. Vérification (`VerifyMagicLink`)**
+L'utilisateur clique le lien → `POST /auth/verify` → `VerifyMagicLink` vérifie le token haché, invalide le `MagicLink` (single-use), crée une `Session` → retourne `{ accessToken (JWT 15 min), refreshToken (opaque 30 j) }`. Si aucun `ADMIN` existant → auto-promotion.
+
+**3. Renouvellement (`RefreshSession`)**
+`POST /auth/refresh` avec `refreshToken` → `RefreshSession` invalide l'ancien token, génère une nouvelle paire → rotation garantit qu'un token volé est détecté au prochain usage.
+
+**4. Déconnexion (`RevokeSession`)**
+`DELETE /auth/session` (Bearer requis) avec `refreshToken` → `RevokeSession` invalide la session → l'access token expire naturellement (15 min).
+
+> Source : [`docs/sessions/diagrams/auth-flow.excalidraw`](../../docs/sessions/diagrams/auth-flow.excalidraw)
 
 ## ADRs associés
 
