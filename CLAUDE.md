@@ -113,6 +113,34 @@ Multi-context layout — `CONTEXT-MAP.md` at the root points to per-package `CON
 | `tdd-analyze` | `/tdd-analyze` | Invoke the `tdd-analyze` agent (requirement → test list). |
 | `tdd-auto` | `/tdd-auto` | Invoke the `tdd-auto` agent (autonomous TDD, no gates). |
 
+## Commits
+
+- Format: `type(scope): description` (Conventional Commits)
+- Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`
+- Max 72 characters on the subject line
+- Commit message and body in **English**
+
+## Pull Requests
+
+- Title: same format as commit message (`type(scope): description`) but **in French**
+- Always linked to an issue with `Closes #xxx`
+- Fill every section of the PR template — never skip or delete sections
+
+## Issues
+
+Three templates available in `.github/ISSUE_TEMPLATE/`:
+
+| Template | Types couverts | Sections |
+|----------|---------------|----------|
+| `feat.md` | feat | Contexte, À implémenter, Tests, Acceptance, Dépend de |
+| `fix.md` | fix | Contexte, Comportement actuel, Comportement attendu, Reproduction, Acceptance, Dépend de |
+| `chore.md` | chore, refactor, docs, perf, ci | Contexte, Tâches, Acceptance, Dépend de |
+
+Rules:
+- Always use the matching template — never create a blank issue
+- Fill every section; remove `Dépend de` only if there are no blocking issues
+- Titles follow Conventional Commits format: `type(scope): description` in French
+
 ### Internal TDD support skills
 
 Used automatically by `tdd`, `tdd-auto`, and `tdd-analyze` agents — not invoked directly by users.
